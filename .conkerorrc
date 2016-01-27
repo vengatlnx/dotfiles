@@ -1,0 +1,126 @@
+//default homepage
+homepage="https://www.google.co.in"
+
+// require tab
+require("tab-bar.js")
+
+// webjump
+define_webjump("ticket", "https://pike.zilogic.com/trac/proj/report/7");
+define_webjump("reviews", "https://pike.zilogic.com/reviews");
+define_webjump("zdrive", "https://pike.zilogic.com/zdrive/");
+define_webjump("mail", "https://pike.zilogic.com/mail");
+define_webjump("erp", "https://zilogic.erpnext.com");
+define_webjump("svn", "https://pike.zilogic.com/svn/proj");
+define_webjump("bitbucket", "https://bitbucket.org/");
+
+// switch buffer
+function define_switch_buffer_key (key, buf_num) {
+    define_key(default_global_keymap, key,
+               function (I) {
+                   switch_to_buffer(I.window,
+                                    I.window.buffers.get_buffer(buf_num));
+               });
+}
+for (let i = 0; i < 10; ++i) {
+    define_switch_buffer_key("M-" + String((i+1)%10), i);
+}
+
+// history completion
+url_completion_use_history = true;
+session_pref('browser.history_expire_days', 1);
+
+// restor buffer
+define_key(default_global_keymap, "C-T", "revive-buffer");
+
+var kill_buffer_original = kill_buffer_original || kill_buffer;
+
+var killed_buffer_urls = [];
+var killed_buffer_histories = [];
+
+//  remember_killed_buffer
+kill_buffer = function (buffer, force) {
+    var hist = buffer.web_navigation.sessionHistory;
+
+    if (buffer.display_uri_string && hist) {
+        killed_buffer_histories.push(hist);
+        killed_buffer_urls.push(buffer.display_uri_string);
+    }
+
+    kill_buffer_original(buffer,force);
+};
+
+interactive("revive-buffer",
+    "Loads url from a previously killed buffer",
+    function restore_killed_buffer (I) {
+        if (killed_buffer_urls.length !== 0) {
+            var url = yield I.minibuffer.read(
+                $prompt = "Restore killed url:",
+                $completer = new all_word_completer($completions = killed_buffer_urls),
+                $default_completion = killed_buffer_urls[killed_buffer_urls.length - 1],
+                $auto_complete = "url",
+                $auto_complete_initial = true,
+                $auto_complete_delay = 0,
+                $require_match = true);
+
+            var window = I.window;
+            var creator = buffer_creator(content_buffer);
+            var idx = killed_buffer_urls.indexOf(url);
+
+            // Create the buffer
+            var buf = creator(window, null);
+
+            // Recover the history
+            buf.web_navigation.sessionHistory = killed_buffer_histories[idx];
+
+            // This line may seem redundant, but it's necessary.
+            var original_index = buf.web_navigation.sessionHistory.index;
+            buf.web_navigation.gotoIndex(original_index);
+
+            // Focus the new tab
+            window.buffers.current = buf;
+
+            // Remove revived from cemitery
+            killed_buffer_urls.splice(idx,1);
+            killed_buffer_histories.splice(idx,1);
+        } else {
+            I.window.minibuffer.message("No killed buffer urls");
+        }
+    });
+
+// order buffers by last access time
+interactive("switch-to-recent-buffer",
+    "Prompt for a buffer and switch to it, displaying the list in last-visited order.",
+    function (I) {
+        switch_to_buffer(
+            I.window,
+            (yield I.minibuffer.read_buffer(
+                $prompt = "Switch to buffer:",
+                $buffers = I.window.buffers.buffer_history,
+                $default = (I.window.buffers.count > 1 ?
+                            I.window.buffers.buffer_history[1] :
+                            I.buffer))));
+    });
+
+define_key(default_global_keymap, "C-x b", "switch-to-recent-buffer");
+
+// disable scrollbars
+// function disable_scrollbars (buffer) {
+//     buffer.top_frame.scrollbars.visible = false;
+// }
+// add_hook("create_buffer_late_hook", disable_scrollbars);
+
+// 
+interactive("toggle-fullscreen",
+            "Toggle whether conkeror uses the whole screen.",
+            function(I) {
+		if(I.window.fullScreen==false){
+		    I.window.fullScreen=true;
+		}else{
+		    I.window.fullScreen=false;
+		}
+	    });
+define_key(default_global_keymap,  "M-f11", "toggle-fullscreen");
+
+//load file conkerorrc
+user_pref('.conkerorrc', '$HOME/.conkeror.d');
+
