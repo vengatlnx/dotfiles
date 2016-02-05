@@ -3,15 +3,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("837e53ea95a422370833d2edac16f8f9c9a36181371b8ef56a337dd3f2bc47cc" "de6ef494d359be8f8022a55e19c535d5741e6f50ac921c49a866ef03e472ae3b" default)))
  '(initial-frame-alist (quote ((fullscreen . maximized))))
  '(package-archives
    (quote
     (("marmalade" . "http://marmalade-repo.org/packages/")
      ("gnu" . "http://elpa.gnu.org/packages/")
-     ("melpa-stable" . "https://stable.melpa.org/packages/"))))
+     ("melpa" . "https://melpa.org/packages/"))))
  '(scroll-conservatively 10000)
  '(shell-completion-execonly t)
  '(transient-mark-mode (quote (only . t))))
@@ -166,3 +163,8 @@
     (error "Minibuffer is not active")))
 
 (global-set-key "\C-co" 'switch-to-minibuffer)
+
+;; buffer stack
+(global-set-key (kbd "C-,") 'buffer-stack-up)
+(global-set-key (kbd "C-.") 'buffer-stack-down)
+(put 'downcase-region 'disabled nil)
