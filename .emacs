@@ -3,6 +3,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(elfeed-feeds
+   (quote
+    ("http://feeds.howtogeek.com/howtogeek"
+     ("http://feeds.feedburner.com/linuxtoday/linux" linux-today)
+     ("http://feeds.cyberciti.biz/Nixcraft-LinuxFreebsdSolarisTipsTricks" nixCraft))))
  '(initial-frame-alist (quote ((fullscreen . maximized))))
  '(package-archives
    (quote
@@ -39,7 +44,7 @@
 
 ;;line number mode
 ;;(global-linum-mode 1)
-(column-number-mode 1)
+(column-number-mode 80)
 
 ;; c indentation
 (setq-default c-basic-offset 4)
@@ -62,6 +67,7 @@
 (add-hook 'eshell-mode-hook
       '(lambda()
 	  (local-set-key (kbd "C-l") 'eshell-clear-buffer)))
+
 
 (setq case-fold-search nil)
 (show-paren-mode 1)
@@ -168,3 +174,21 @@
 (global-set-key (kbd "C-,") 'buffer-stack-up)
 (global-set-key (kbd "C-.") 'buffer-stack-down)
 (put 'downcase-region 'disabled nil)
+
+;; elfeed
+(global-set-key (kbd "C-x w") 'elfeed)
+
+;; eshell path
+(defun eshell-mode-hook-func ()
+(setq eshell-path-env (concat "/home/user/.local/bin:" eshell-path-env))
+(setenv "PATH" (concat "/home/user/.local/bin:" (getenv "PATH")))
+(define-key eshell-mode-map (kbd "M-s") 'other-window-or-split))
+
+(add-hook 'eshell-mode-hook 'eshell-mode-hook-func)
+
+;; emacs browser
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "/home/user/.local/usr/bin/conkeror")
+
+;; Start Emacs server
+(server-start)
