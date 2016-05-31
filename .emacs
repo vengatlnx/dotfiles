@@ -190,5 +190,19 @@
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "/home/user/.local/usr/bin/conkeror")
 
+;; set font
+(set-default-font "-apple-Monaco-normal-normal-normal-*-*-*-*-*-*-0-iso10646-1")
+
+;; underline cursor(box, hollow, nil, bar, (bar . width), hbar, (hbar . height))
+(setq-default cursor-type 'hbar)
+
+;; meaningful names for buffers with the same name
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
+(setq uniquify-separator "/")
+(setq uniquify-after-kill-buffer-p t)    
+(setq uniquify-ignore-buffers-re "^\\*") 
+
+
 ;; Start Emacs server
 (server-start)
