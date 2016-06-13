@@ -203,6 +203,12 @@
 (setq uniquify-after-kill-buffer-p t)    
 (setq uniquify-ignore-buffers-re "^\\*") 
 
+;; interactive compilation
+(defun compile-interactive()
+  (interactive)
+  (setq current-prefix-arg '(4))
+  (call-interactively 'compile))
+(global-set-key (kbd "<f9>") 'compile-interactive)
 
 ;; Start Emacs server
 (server-start)
