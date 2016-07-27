@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: main
+# key: m
+# --
+#include <stdio.h>
+
+int main(void) {
+	$0
+	return 0;
+}

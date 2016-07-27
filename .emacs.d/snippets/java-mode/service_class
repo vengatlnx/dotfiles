@@ -1,0 +1,20 @@
+# -*- mode: snipped -*-
+# name: service_class
+# key: service
+# --
+import android.app.Service;
+import android.os.IBinder;
+import android.content.Intent;
+import android.os.Bundle;
+
+public class `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))` extends Service {
+    @Override
+	public IBinder onBind(Intent arg0) {
+		   return null;
+	}
+
+	@Override
+	public void onCreate() {
+		   $0
+	}
+}

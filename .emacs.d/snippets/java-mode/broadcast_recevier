@@ -1,0 +1,14 @@
+# -*- mode: snipped -*-
+# name: broadcast_receiver
+# key: broadcast
+# --
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+
+public class `(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))` extends BroadcastReceiver {
+    @Override
+	public void onReceive(Context context, Intent intent) {
+		   $0
+	}
+}
