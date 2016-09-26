@@ -1,3 +1,10 @@
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -7,7 +14,9 @@
    (quote
     ("http://feeds.howtogeek.com/howtogeek"
      ("http://feeds.feedburner.com/linuxtoday/linux" linux-today)
-     ("http://feeds.cyberciti.biz/Nixcraft-LinuxFreebsdSolarisTipsTricks" nixCraft))))
+     ("http://feeds.cyberciti.biz/Nixcraft-LinuxFreebsdSolarisTipsTricks" nixCraft)
+	 ("http://sachachua.com/blog/category/emacs-news/feed" emacs-news))))
+ 
  '(initial-frame-alist (quote ((fullscreen . maximized))))
  '(package-archives
    (quote
@@ -50,12 +59,12 @@
 (setq-default c-basic-offset 4)
 
 ;; spell-check in text file
-(defun fly-spell-check ()
-  (when (and (stringp buffer-file-name)
-	     (string-match "\\.txt\\'" buffer-file-name))
-    (flyspell-mode)))
+;; (defun fly-spell-check ()
+;;   (when (and (stringp buffer-file-name)
+;; 	     (string-match "\\.txt\\'" buffer-file-name))
+;;     (flyspell-mode)))
 
-(add-hook 'find-file-hook 'fly-spell-check)
+;; (add-hook 'find-file-hook 'fly-spell-check)
 
 ;; eshell clear buffer
 (defun eshell-clear-buffer ()
@@ -75,6 +84,10 @@
 ;; mu4e
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 (require 'setup-mu4e)
+
+;;initial emacs with startup message
+(require 'scratch-message)
+(setq scratch-message-mode t)
 
 ;; window switching
 (require 'window-number)
@@ -149,8 +162,14 @@
 
 ;; Emacs24 theme
 ;;(add-to-list 'load-path "~/.emacs.d/themes/dracula-theme.el")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-(load-theme 'dracula t)
+;; (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+;; (load-theme 'dracula t)
+;;(load-theme 'flatland t)
+
+(add-to-list 'load-path "~/.emacs.d/elpa/spacemacs-theme-20160806.515/")
+(require 'spacemacs-common)
+(load-theme 'spacemacs-dark t)
+
 
 ;; load eww-lnum
 (load "~/.emacs.d/lisp/eww-lnum")
@@ -186,22 +205,45 @@
 
 (add-hook 'eshell-mode-hook 'eshell-mode-hook-func)
 
-;; emacs browser
-(setq browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "/home/user/.local/usr/bin/conkeror")
+;; hide password prompt in shell
+(add-hook 'comint-output-filter-functions
+'comint-watch-for-password-prompt)
 
-;; set font
+;; set fontpp
 (set-default-font "-apple-Monaco-normal-normal-normal-*-*-*-*-*-*-0-iso10646-1")
 
 ;; underline cursor(box, hollow, nil, bar, (bar . width), hbar, (hbar . height))
 (setq-default cursor-type 'hbar)
 
+;; emacs browser
+;; (setq browse-url-browser-function 'browse-url-generic
+;;       browse-url-generic-program "/home/user/.local/usr/bin/conkeror")
+
 ;; meaningful names for buffers with the same name
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 (setq uniquify-separator "/")
-(setq uniquify-after-kill-buffer-p t)    
-(setq uniquify-ignore-buffers-re "^\\*") 
+(setq uniquify-after-kill-buffer-p t)    ; rename after killing uniquified
+(setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
+
+;; scroll key
+(global-set-key "\M-n"  (lambda () (interactive) (scroll-up   4)))
+(global-set-key "\M-p"  (lambda () (interactive) (scroll-down 4)))
+
+;; single line only
+(defun single-lines-only ()
+  "replace multiple blank lines with a single one"
+  (interactive)
+  (goto-char (point-min))
+  (while (re-search-forward "\\(^\\s-*$\\)\n" nil t)
+    (replace-match "\n")
+    (forward-char 1)))
+
+;; entering the debugger on Error
+;;(setq debug-on-error t)
+
+;; Start Emacs server
+;;(server-start)
 
 ;; interactive compilation
 (defun compile-interactive()
@@ -210,5 +252,29 @@
   (call-interactively 'compile))
 (global-set-key (kbd "<f9>") 'compile-interactive)
 
-;; Start Emacs server
-(server-start)
+;; meaningful names for buffers with the same name
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
+(setq uniquify-separator "/")
+(setq uniquify-after-kill-buffer-p t)    
+(setq uniquify-ignore-buffers-re "^\\*") 
+
+;; c indentation
+(setq-default c-basic-offset 4
+	      tab-width 4
+	      indent-tabs-mode t)
+
+;; yasnippet
+(add-to-list 'load-path "~/.emacs.d/elpa/yasnippet-20160723.510")
+(require 'yasnippet)
+(yas-global-mode 1)
+(global-set-key (kbd "s-w") #'aya-create)
+(global-set-key (kbd "s-y") #'aya-expand)
+
+;; UTF-8 support
+(prefer-coding-system       'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+
+(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))

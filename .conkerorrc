@@ -2,7 +2,8 @@
 homepage="https://www.google.co.in"
 
 // require tab
-require("tab-bar.js")
+//require("tab-bar.js")
+require("new-tabs.js");
 
 // webjump
 define_webjump("ticket", "https://pike.zilogic.com/trac/proj/report/7");
@@ -12,6 +13,9 @@ define_webjump("mail", "https://pike.zilogic.com/mail");
 define_webjump("erp", "https://zilogic.erpnext.com");
 define_webjump("svn", "https://pike.zilogic.com/svn/proj");
 define_webjump("bitbucket", "https://bitbucket.org/");
+define_webjump("wiki", "https://pike.zilogic.com/trac/proj/wiki")
+define_webjump("chennaipy", "http://www.meetup.com/Chennaipy")
+define_webjump("embedded-linux", "http://www.meetup.com/embedded-linux")
 
 // switch buffer
 function define_switch_buffer_key (key, buf_num) {
@@ -31,6 +35,9 @@ session_pref('browser.history_expire_days', 1);
 
 // restor buffer
 define_key(default_global_keymap, "C-T", "revive-buffer");
+
+// caret-mode
+define_key(default_global_keymap, "C-c", "caret-mode");
 
 var kill_buffer_original = kill_buffer_original || kill_buffer;
 
@@ -123,4 +130,3 @@ define_key(default_global_keymap,  "M-f11", "toggle-fullscreen");
 
 //load file conkerorrc
 user_pref('.conkerorrc', '$HOME/.conkeror.d');
-

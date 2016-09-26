@@ -98,8 +98,7 @@ fi
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
+case "$TERM" in xterm*|rxvt*)
     PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
     ;;
 *)
@@ -163,9 +162,22 @@ export STYLE_DIR=$HOME/stylesheets/trunk
 # Erase duplicates across the whole history
 export HISTCONTROL=erasedups
 
+# ignore commands in history
+export HISTIGNORE="&:[ ]*:exit:ls:bg:fg:history:clear"
+
+# Prepend cd to directory names automatically
+shopt -s autocd
+# Correct spelling errors during tab-completion
+shopt -s dirspell
+# Correct spelling errors in arguments supplied to cd
+shopt -s cdspell
+
 # local binary path
 export PATH=$HOME/.local/bin:$PATH
 export PATH=$HOME/.local/usr/bin:$PATH
+
+# local library path
+export LD_LIBRARY_PATH=$HOME/.local/usr/lib
 
 # android path
 export ANDROID_HOME=$HOME/Android/android-sdk-linux
@@ -177,7 +189,20 @@ export JAVA_HOME=$HOME/.local/usr/lib/jvm/jdk-8-oracle-amd64
 export PATH=$JAVA_HOME/bin:$PATH
 
 # multiple emulator
-export PATH=$HOME/emu:$PATH
+#export PATH=$HOME/emu:$PATH
 
 # git tree
 git config --global alias.tree "log --oneline --decorate --all --graph"
+
+export GEM_HOME=/home/user/.gem
+
+# dir color
+LS_COLORS=$LS_COLORS:'di=0;36:' ; export LS_COLORS
+
+# emacs client
+export ALTERNATE_EDITOR=""
+export EDITOR=emacsclient
+export PS1="\w$ "
+
+# ignore mis-spelling in cd command
+shopt -s cdspell
