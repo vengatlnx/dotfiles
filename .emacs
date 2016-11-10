@@ -243,7 +243,7 @@
 ;;(setq debug-on-error t)
 
 ;; Start Emacs server
-;;(server-start)
+(server-start)
 
 ;; interactive compilation
 (defun compile-interactive()
@@ -260,9 +260,8 @@
 (setq uniquify-ignore-buffers-re "^\\*") 
 
 ;; c indentation
-(setq-default c-basic-offset 4
-	      tab-width 4
-	      indent-tabs-mode t)
+(setq-default c-basic-offset 2
+			  indent-tabs-mode nil)
 
 ;; yasnippet
 (add-to-list 'load-path "~/.emacs.d/elpa/yasnippet-20160723.510")
@@ -278,3 +277,10 @@
 (set-keyboard-coding-system 'utf-8)
 
 (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+
+(add-hook 'c++-mode-hook 'google-set-c-style)
+
+;; hide password prompt for git using regexp
+(setq comint-password-prompt-regexp
+      (concat comint-password-prompt-regexp
+              "\\|Password for .*:\\s *\\'"))
