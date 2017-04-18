@@ -166,10 +166,11 @@
 ;; (load-theme 'dracula t)
 ;;(load-theme 'flatland t)
 
-(add-to-list 'load-path "~/.emacs.d/elpa/spacemacs-theme-20160806.515/")
-(require 'spacemacs-common)
-(load-theme 'spacemacs-dark t)
+;; (add-to-list 'load-path "~/.emacs.d/elpa/spacemacs-theme-20160806.515/")
+;; (require 'spacemacs-common)
+;; (load-theme 'spacemacs-dark t)
 
+(load-theme 'challenger-deep t)
 
 ;; load eww-lnum
 (load "~/.emacs.d/lisp/eww-lnum")
@@ -210,7 +211,7 @@
 'comint-watch-for-password-prompt)
 
 ;; set fontpp
-(set-default-font "-apple-Monaco-normal-normal-normal-*-*-*-*-*-*-0-iso10646-1")
+(set-default-font "-apple-Monaco-normal-normal-normal-*-*-140-*-*-*-0-iso10646-1")
 
 ;; underline cursor(box, hollow, nil, bar, (bar . width), hbar, (hbar . height))
 (setq-default cursor-type 'hbar)
@@ -260,7 +261,7 @@
 (setq uniquify-ignore-buffers-re "^\\*") 
 
 ;; c indentation
-(setq-default c-basic-offset 2
+(setq-default c-basic-offset 4
 			  indent-tabs-mode nil)
 
 ;; yasnippet
@@ -284,3 +285,11 @@
 (setq comint-password-prompt-regexp
       (concat comint-password-prompt-regexp
               "\\|Password for .*:\\s *\\'"))
+;; powerline
+(require 'powerline)
+(powerline-default-theme)
+
+(global-set-key (kbd "C-c C-r") 'comment-region)
+(global-set-key (kbd "C-c C-u") 'uncomment-region)
+
+(setq-default fill-column 80)
